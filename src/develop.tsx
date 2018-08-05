@@ -23,9 +23,10 @@ class Everything extends React.Component<any, { index: number }> {
 				<SoundCloud
 					url={urls[index % urls.length]}
 					config={{ visual: true }}
-					onPlay={() => console.log('on play called')}
-					onPause={() => console.log('on pause called')}
-					onEnd={() => console.log('on end called')}
+					onPlay={info => console.log('on play called', info)}
+					onPause={info => console.log('on pause called', info)}
+					onEnd={info => console.log('on end called', info)}
+					onReady={() => console.log('on ready')}
 				/>
 				<button onClick={() => this.setState({ index: index + 1 })}>
 					Next Track

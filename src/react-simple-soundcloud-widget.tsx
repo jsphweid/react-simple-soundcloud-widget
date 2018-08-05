@@ -16,13 +16,21 @@ export interface ConfigType {
 	hide_related?: boolean
 }
 
+export interface InfoType {
+	currentPosition: number
+	loadedProgress: number
+	relativePosition: number
+	soundId: number
+}
+
 export interface ReactSimpleSoundCloudWidgetProps {
 	url: string
 	config?: ConfigType
 	id?: string
-	onPlay?: () => void
-	onPause?: () => void
-	onEnd?: () => void
+	onPlay?: (info: InfoType) => void
+	onPause?: (info: InfoType) => void
+	onEnd?: (info: InfoType) => void
+	onReady?: () => void
 }
 
 class ReactSimpleSoundCloudWidget extends React.Component<
@@ -55,6 +63,7 @@ class ReactSimpleSoundCloudWidget extends React.Component<
 		this.internalWidget.unbind(win.SC.Widget.Events.PLAY)
 		this.internalWidget.unbind(win.SC.Widget.Events.PAUSE)
 		this.internalWidget.unbind(win.SC.Widget.Events.FINISH)
+		this.internalWidget.unbind(win.SC.Widget.Events.READY)
 	}
 
 	private setupWidget(widget: any) {
@@ -63,6 +72,7 @@ class ReactSimpleSoundCloudWidget extends React.Component<
 		this.internalWidget.bind(win.SC.Widget.Events.PLAY, this.props.onPlay)
 		this.internalWidget.bind(win.SC.Widget.Events.PAUSE, this.props.onPause)
 		this.internalWidget.bind(win.SC.Widget.Events.FINISH, this.props.onEnd)
+		this.internalWidget.bind(win.SC.Widget.Events.READY, this.props.onReady)
 	}
 
 	private reloadWidget() {
