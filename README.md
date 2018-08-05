@@ -8,7 +8,13 @@ This library assumes you are using React and manage the React dependency by your
 
 ### use
 
-`npm i react-simple-soundcloud-widget`
+install:
+
+```javascript
+npm i react-simple-soundcloud-widget
+```
+
+using:
 
 ```javascript
 import SoundCloudWidget from 'react-simple-soundcloud-widget'
@@ -45,5 +51,7 @@ This is all that is truly necessary. Everything else is optional. Here is an exa
 
 ### develop
 
-`npm i`
-`npm run start`
+```javascript
+npm i
+npm run start
+```
