@@ -1,6 +1,6 @@
 {
 	"name": "react-simple-soundcloud-widget",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "basic react wrapper around their widget",
 	"main": "dist/react-simple-soundcloud-widget.js",
 	"types": "dist/react-simple-soundcloud-widget.d.ts",
