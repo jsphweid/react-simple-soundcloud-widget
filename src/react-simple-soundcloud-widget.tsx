@@ -1,32 +1,10 @@
 import * as React from 'react'
 import { createWidget } from './actions'
-
-export interface ConfigType {
-	auto_play?: boolean
-	visual?: boolean
-	buying?: boolean
-	liking?: boolean
-	download?: boolean
-	sharing?: boolean
-	show_artwork?: boolean
-	show_comments?: boolean
-	show_playcount?: boolean
-	show_user?: boolean
-	show_reposts?: boolean
-	hide_related?: boolean
-}
-
-export interface InfoType {
-	currentPosition: number
-	loadedProgress: number
-	relativePosition: number
-	soundId: number
-}
+import { InfoType, ConfigType, WidgetType } from './types'
 
 export interface ReactSimpleSoundCloudWidgetProps {
 	url: string
 	config?: ConfigType
-	id?: string
 	onPlay?: (info: InfoType) => void
 	onPause?: (info: InfoType) => void
 	onEnd?: (info: InfoType) => void
@@ -37,36 +15,42 @@ class ReactSimpleSoundCloudWidget extends React.Component<
 	ReactSimpleSoundCloudWidgetProps
 > {
 	static defaultProps: Partial<ReactSimpleSoundCloudWidgetProps>
-	private internalWidget: any = null
+	private internalWidget: WidgetType | null = null
+	private id = `react-sc-widget${Math.random()
+		.toString(36)
+		.substr(2, length)}`
 
 	constructor(props: ReactSimpleSoundCloudWidgetProps) {
 		super(props)
 	}
 
-	public componentDidMount() {
-		createWidget(this.props.id, widget => {
+	public componentDidMount(): void {
+		createWidget(this.id, (widget: WidgetType) => {
 			this.setupWidget(widget)
 			this.reloadWidget()
 		})
 	}
 
-	public shouldComponentUpdate(nextProps: ReactSimpleSoundCloudWidgetProps) {
+	public shouldComponentUpdate(
+		nextProps: ReactSimpleSoundCloudWidgetProps
+	): boolean {
 		return nextProps.url !== this.props.url
 	}
 
-	public componentDidUpdate() {
+	public componentDidUpdate(): void {
 		this.reloadWidget()
 	}
 
-	public componentWillUnmount() {
+	public componentWillUnmount(): void {
 		const win: any = window
+		if (!this.internalWidget) return
 		this.internalWidget.unbind(win.SC.Widget.Events.PLAY)
 		this.internalWidget.unbind(win.SC.Widget.Events.PAUSE)
 		this.internalWidget.unbind(win.SC.Widget.Events.FINISH)
 		this.internalWidget.unbind(win.SC.Widget.Events.READY)
 	}
 
-	private setupWidget(widget: any) {
+	private setupWidget(widget: WidgetType): void {
 		const win: any = window
 		this.internalWidget = widget
 		this.internalWidget.bind(win.SC.Widget.Events.PLAY, this.props.onPlay)
@@ -75,16 +59,18 @@ class ReactSimpleSoundCloudWidget extends React.Component<
 		this.internalWidget.bind(win.SC.Widget.Events.READY, this.props.onReady)
 	}
 
-	private reloadWidget() {
+	private reloadWidget(): void {
+		if (!this.internalWidget) return
 		this.internalWidget.load(this.props.url, { ...this.props.config })
 	}
 
 	public render() {
+		const { config } = this.props
 		return (
 			<iframe
-				id={this.props.id}
+				id={this.id}
 				width="100%"
-				height={this.props.config.visual ? '450' : '166'}
+				height={config && config.visual ? '450' : '166'}
 				scrolling="no"
 				frameBorder="no"
 				src="https://w.soundcloud.com/player/?url="
@@ -94,7 +80,6 @@ class ReactSimpleSoundCloudWidget extends React.Component<
 }
 
 ReactSimpleSoundCloudWidget.defaultProps = {
-	id: 'react-sc-widget',
 	config: {},
 	onPlay: () => {},
 	onPause: () => {},
