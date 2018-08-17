@@ -18,14 +18,16 @@ class ReactSimpleSoundCloudWidget extends React.Component<
 	private internalWidget: WidgetType | null = null
 	private id = `react-sc-widget${Math.random()
 		.toString(36)
-		.substr(2, length)}`
+		.substr(2, 6)}`
 
 	constructor(props: ReactSimpleSoundCloudWidgetProps) {
 		super(props)
 	}
 
 	public componentDidMount(): void {
+		console.log('this.id', this.id)
 		createWidget(this.id, (widget: WidgetType) => {
+			console.log('widget made... setting up', widget)
 			this.setupWidget(widget)
 			this.reloadWidget()
 		})
