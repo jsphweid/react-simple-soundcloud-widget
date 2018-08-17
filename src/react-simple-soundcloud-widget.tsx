@@ -67,7 +67,8 @@ class ReactSimpleSoundCloudWidget extends React.Component<
 	}
 
 	public render() {
-		const { config } = this.props
+		console.log('rendering react-simple-soundcloud-widget', this.props.url)
+		const { config, url } = this.props
 		return (
 			<iframe
 				id={this.id}
@@ -75,7 +76,7 @@ class ReactSimpleSoundCloudWidget extends React.Component<
 				height={config && config.visual ? '450' : '166'}
 				scrolling="no"
 				frameBorder="no"
-				src="https://w.soundcloud.com/player/?url="
+				src={`https://w.soundcloud.com/player/?url=${url}`}
 			/>
 		)
 	}
