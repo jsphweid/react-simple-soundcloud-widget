@@ -2,8 +2,11 @@ import * as React from 'react'
 import { createWidget } from './actions'
 import { InfoType, ConfigType, WidgetType } from './types'
 
+const defaultId = 'react-sc-widget'
+
 export interface ReactSimpleSoundCloudWidgetProps {
 	url: string
+	id?: string
 	config?: ConfigType
 	onPlay?: (info: InfoType) => void
 	onPause?: (info: InfoType) => void
@@ -16,18 +19,13 @@ class ReactSimpleSoundCloudWidget extends React.Component<
 > {
 	static defaultProps: Partial<ReactSimpleSoundCloudWidgetProps>
 	private internalWidget: WidgetType | null = null
-	private id = `react-sc-widget${Math.random()
-		.toString(36)
-		.substr(2, 6)}`
 
 	constructor(props: ReactSimpleSoundCloudWidgetProps) {
 		super(props)
 	}
 
 	public componentDidMount(): void {
-		console.log('this.id', this.id)
-		createWidget(this.id, (widget: WidgetType) => {
-			console.log('widget made... setting up', widget)
+		createWidget(this.props.id || defaultId, (widget: WidgetType) => {
 			this.setupWidget(widget)
 			this.reloadWidget()
 		})
@@ -67,11 +65,10 @@ class ReactSimpleSoundCloudWidget extends React.Component<
 	}
 
 	public render() {
-		console.log('rendering react-simple-soundcloud-widget', this.props.url)
-		const { config, url } = this.props
+		const { config, url, id } = this.props
 		return (
 			<iframe
-				id={this.id}
+				id={id || defaultId}
 				width="100%"
 				height={config && config.visual ? '450' : '166'}
 				scrolling="no"
